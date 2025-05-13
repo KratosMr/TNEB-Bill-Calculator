@@ -18,7 +18,7 @@ This custom integration for Home Assistant thet calculates your TNEB electricity
 1. Download or clone this repository.  
 2. Copy the folder to your Home Assistant configuration:  
    ```
-   config/custom_components/electricity_bill_60day/
+   config/custom_components/tneb_bill_calculator/
    ```
 3. Restart Home Assistant.  
 4. Go to **Settings → Devices & Services → + Add Integration**  
