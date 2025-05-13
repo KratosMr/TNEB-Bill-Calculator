@@ -3,8 +3,6 @@
   "name": "TNEB Bill Calculator",
   "version": "1.0.0",
   "config_flow": true,
-  "documentation": "",
-  "requirements": [],
-  "dependencies": [],
-  "codeowners": []
+  "documentation": "https://github.com/KratosMr/TNEB-Bill-Calculator",
+  "codeowners": ["Anand"]
 }
