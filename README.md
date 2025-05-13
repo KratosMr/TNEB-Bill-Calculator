@@ -13,7 +13,11 @@ This custom integration for Home Assistant thet calculates your TNEB electricity
   - `sensor.electricity_bill_60_days`  
   - `sensor.electricity_usage_60_days`
 
-## 📦 Installation
+## 🛠 HACS Compatibility
+
+This integration is compatible with HACS. Add it as a custom repository under the **Integrations** category.
+
+## 📦 Manual Installation
 
 1. Download or clone this repository.  
 2. Copy the folder to your Home Assistant configuration:  
