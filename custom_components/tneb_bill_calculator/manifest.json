@@ -1,8 +1,0 @@
-{
-  "domain": "tneb_bill_calculator",
-  "name": "TNEB Bill Calculator",
-  "version": "1.0.0",
-  "config_flow": true,
-  "documentation": "https://github.com/KratosMr/TNEB-Bill-Calculator",
-  "codeowners": ["Anand"]
-}
