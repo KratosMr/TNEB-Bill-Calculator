@@ -1,61 +1,68 @@
-# TNEB Bill Calculator – Home Assistant Integration
+# TNEB Tariff Calculator
 
-This custom integration for Home Assistant thet calculates your TNEB electricity bill in real-time based on energy usage over a rolling 60-day period.
+A Home Assistant custom integration that calculates your electricity bill
+using TNEB's (Tamil Nadu Electricity Board) telescopic slab tariff.
 
-## 🔧 Features
+TNEB's domestic tariff isn't one continuous slab table - the whole table
+that applies depends on your total units consumed in the billing cycle:
 
-- ⏱ Rolling 60-day billing cycle  
-- ⚡ Tracks total electricity usage (kWh)  
-- 💵 Calculates electricity bill using slab-based rates  
-- 🧠 Smart persistent storage  
-- ⚙️ UI-based configuration (no YAML!)  
-- 📊 Exposes two sensors:  
-  - `sensor.electricity_bill_60_days`  
-  - `sensor.electricity_usage_60_days`
+- **≤ 500 units** → one slab table
+- **501-2000 units** → a different, wider slab table applied to the entire
+  consumption
 
-## 🛠 HACS Compatibility
+This integration:
 
-This integration is compatible with HACS. Add it as a custom repository under the **Integrations** category.
+- Tracks a billing cycle anchored to a real meter-reading date you provide
+  (not a fixed calendar day), so it lines up with your actual TNEB cycle
+- Computes units consumed since the start of the current cycle from your
+  raw cumulative energy sensor
+- Applies the correct TNEB slab table telescopically and gives you a live
+  estimated bill, with a full slab-by-slab cost breakdown as an attribute
 
-## 📦 Manual Installation
+## Installation (HACS)
 
-1. Download or clone this repository.  
-2. Copy the folder to your Home Assistant configuration:  
-   ```
-   config/custom_components/tneb_bill_calculator/
-   ```
-3. Restart Home Assistant.  
-4. Go to **Settings → Devices & Services → + Add Integration**  
-5. Search for **TNEB Bill Calculator**  
-6. Choose:  
-   - Your daily energy usage sensor (e.g. `sensor.vue2_total_daily_energy`)  
-   - The **start date** of the 60-day billing period  
+1. In Home Assistant, go to **HACS → Integrations → ⋮ (top right) → Custom
+   repositories**
+2. Add this repository's URL, category **Integration**
+3. Find "TNEB Tariff Calculator" in HACS and install it
+4. Restart Home Assistant
 
-## 🧮 Billing Logic
+## Installation (manual)
 
-### Slab Rates (up to 500 units):
+Copy `custom_components/tneb_tariff` into your Home Assistant
+`config/custom_components/` folder and restart.
 
-| Units        | Rate (₹/unit) |
-|--------------|---------------|
-| 1 - 100      | 0.00          |
-| 101 - 200    | 2.35          |
-| 201 - 400    | 4.70          |
-| 401 - 500    | 6.30          |
+## Setup
 
-### Slab Rates (above 500 units):
+Settings → Devices & Services → Add Integration → **TNEB Tariff
+Calculator**, then provide:
 
-| Units        | Rate (₹/unit) |
-|--------------|---------------|
-| 501 - 600    | 8.40          |
-| 601 - 800    | 9.45          |
-| 801 - 1000   | 10.50         |
-| 1001+        | 11.55         |
+| Field | What to enter |
+|---|---|
+| Raw energy sensor | Your always-increasing cumulative kWh sensor |
+| Date of the initial meter reading | The date you physically read your meter (ideally your last real bill's start date) |
+| Meter reading on that date | The kWh value at that date (optional - leave blank to start counting from today) |
+| Billing cycle length | 2 for bimonthly (TNEB's usual cycle) |
+| Fixed charge | Optional flat charge added on top |
 
-## 🧠 Data Storage
+## Entities created
 
-Historical data is persisted locally in `.storage` and updated daily. The system keeps the latest 60 days of consumption and recalculates the bill every hour.
+- `sensor.<name>_units_this_cycle` - units consumed since the current
+  cycle started, with `cycle_start`, `next_reset`, and `baseline_reading`
+  attributes
+- `sensor.<name>` - the calculated bill, with `units_consumed`,
+  `energy_charge`, `tariff_table_used`, and `slab_breakdown` attributes
 
-## 🛠 HACS Compatibility
+## Notes / limitations
 
-This integration is compatible with HACS. Add it as a custom repository under the **Integrations** category.
-
+- Only the energy-charge slabs you supply are modeled (0-2000 units from
+  TNEB's published table). Consumption beyond 2000 units is billed at the
+  highest known rate as a fallback - update `tariff.py` if TNEB publishes
+  higher slabs.
+- If your anchor date is more than one billing cycle in the past when you
+  set this up, the integration can't retroactively know your meter's
+  reading at the true cycle start, so it starts counting from the live
+  reading instead and marks `approximate_baseline: true` on the units
+  sensor until the next cycle boundary.
+- Fixed/service charges based on connected load aren't modeled beyond the
+  flat optional `fixed_charge` field.
