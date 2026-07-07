@@ -1,0 +1,29 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up TNEB Tariff Calculator",
+        "description": "Enter the date and reading of an actual meter reading you took (ideally the start of a billing cycle). Future bimonthly cycle boundaries are calculated forward from this date.",
+        "data": {
+          "name": "Name",
+          "source_sensor": "Raw energy sensor (cumulative kWh, always increasing)",
+          "initial_reading_date": "Date of the initial meter reading",
+          "initial_reading_value": "Meter reading on that date (kWh, optional)",
+          "cycle_months": "Billing cycle length in months (2 = bimonthly)",
+          "fixed_charge": "Fixed / service charge (optional, added on top)"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "source_sensor": "Raw energy sensor (cumulative kWh, always increasing)",
+          "cycle_months": "Billing cycle length in months (2 = bimonthly)",
+          "fixed_charge": "Fixed / service charge (optional, added on top)"
+        }
+      }
+    }
+  }
+}
