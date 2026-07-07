@@ -1,11 +1,11 @@
 {
   "domain": "tneb_tariff",
   "name": "TNEB Tariff Calculator",
-  "codeowners": ["@your-github-username"],
+  "codeowners": ["@KratosMr"],
   "config_flow": true,
-  "documentation": "https://github.com/yourusername/tneb_tariff",
+  "documentation": "https://github.com/KratosMr/tneb_tariff",
   "iot_class": "calculated",
-  "issue_tracker": "https://github.com/yourusername/tneb_tariff/issues",
+  "issue_tracker": "https://github.com/KratosMr/tneb_tariff/issues",
   "requirements": [],
   "version": "1.0.0"
 }
